@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151128050007) do
+ActiveRecord::Schema.define(version: 20151128062420) do
 
   create_table "bookmarks", force: :cascade do |t|
     t.string   "title"
@@ -21,6 +21,19 @@ ActiveRecord::Schema.define(version: 20151128050007) do
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.text     "url"
+  end
+
+  create_table "entries", force: :cascade do |t|
+    t.text     "url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "entry_bookmarks", force: :cascade do |t|
+    t.integer  "entry_id"
+    t.integer  "bookmark_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "keywords", force: :cascade do |t|

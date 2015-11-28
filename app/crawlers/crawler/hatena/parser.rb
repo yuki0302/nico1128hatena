@@ -3,22 +3,33 @@ module Crawler
     class Parser < Base
       class << self
         def save_keywords(url)
-          url = "http://b.hatena.ne.jp/entry/" + url.gsub(/(http|https)/, "/").delete("/, :") + "/"
+          if Entry.where(url: url) == []
+            e = Entry.create(url: url)
+          end
+          entry_url = url
+          url = "http://b.hatena.ne.jp/entry/" + url.gsub(/(http|https)/, ":").gsub(/(:s)/, "/").delete("/, :") + "/"
           html = Crawler::Base.get_html(url)
           f = Crawler::Base.parse(html)
           keywords = try(->{
-            f.search("meta")[1]["content"].split(",")
+            key = f.search("meta")[1]["content"].split(",")
           })
+          if keywords == "undefined"
+            k1 = Keyword.first.name
+            keywords = [k1]
+            e1 = Entry.first.url
+            entry_url = [e1]
+          end
           #返り値はArray
           keywords.each do |keyword|
             if Keyword.where(name: keyword) == []
               k = Keyword.create(name: keyword)
               k.save
             end
+            parse_rss(keyword, entry_url)
           end
         end
 
-        def parse_rss(keyword)
+        def parse_rss(keyword, entry_url)
           require 'open-uri'
           url =  "http://b.hatena.ne.jp/keyword/" + URI::encode(keyword) + "?mode=rss&sort=count"
           html = Crawler::Base.get_html(url)
@@ -49,6 +60,8 @@ module Crawler
 
             {title: title, url: url, image_url: image_url, desc: desc, original_posted_at: posted_at}
             bm = Bookmark.create(title: title, url: url, image_url: image_url, desc: desc, original_posted_at: posted_at)
+            e = Entry.where(url: entry_url).first
+            eb = EntryBookmark.create(bookmark_id: bm.id, entry_id: e.id)
             bm.save
           end
         end
