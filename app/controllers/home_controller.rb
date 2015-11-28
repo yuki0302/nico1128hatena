@@ -1,4 +1,5 @@
 class HomeController < ApplicationController
+  skip_before_filter :verify_authenticity_token
   def index
   	entry_url = params[:url]
     until entry_url.last == "/"
@@ -10,7 +11,7 @@ class HomeController < ApplicationController
       @entry = Entry.where(url: entry_url)
     end
     if @entry.last.bookmarks == []
-      render json: Bookmark.limit(20)
+      render json: Bookmark.all.sample(20)
     else
       render json: @entry.last.bookmarks
     end
