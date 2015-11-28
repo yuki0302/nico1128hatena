@@ -13,6 +13,7 @@ module Crawler
           keywords = try(->{
             key = f.search("meta")[1]["content"].split(",")
           })
+          puts "#{entry_url}のキーワードは#{keywords}です"
           if keywords == "undefined"
             k1 = Keyword.first.name
             keywords = [k1]
@@ -59,7 +60,7 @@ module Crawler
             end
 
             {title: title, url: url, image_url: image_url, desc: desc, original_posted_at: posted_at}
-            bm = Bookmark.create(title: title, url: url, image_url: image_url, desc: desc, original_posted_at: posted_at)
+            bm = Bookmark.create(title: title, url: url, image_url: image_url, desc: desc, original_posted_at: posted_at, keyword: keyword)
             e = Entry.where(url: entry_url).first
             eb = EntryBookmark.create(bookmark_id: bm.id, entry_id: e.id)
             bm.save

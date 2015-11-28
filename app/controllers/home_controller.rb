@@ -13,7 +13,7 @@ class HomeController < ApplicationController
     if @entry.last.bookmarks == []
       render json: Bookmark.all.sample(20)
     else
-      render json: @entry.last.bookmarks.compact
+      render json: @entry.last.bookmarks.compact.shuffle
     end
   end
 end
