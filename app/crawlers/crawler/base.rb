@@ -88,7 +88,7 @@ module Crawler
         Rails.logger.info "created size: #{size} name: #{filename}"
       end
 
-      def put_file_by_url(url, file_type:, dir_name:, override: false)
+      def put_file_by_url()
         file_name = file_type + ".#{Date.today.strftime("%Y%m%d")}"
         file_location = "#{dir_name}/#{file_name}"
         if override
