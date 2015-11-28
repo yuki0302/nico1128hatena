@@ -11,7 +11,7 @@ class HomeController < ApplicationController
       @entry = Entry.where(url: entry_url)
     end
     if @entry.last.bookmarks == []
-      render json: Bookmark.limit(20)
+      render json: Bookmark.all.sample(20)
     else
       render json: @entry.last.bookmarks
     end
