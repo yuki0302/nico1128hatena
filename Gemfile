@@ -72,3 +72,10 @@ group :development do
   gem 'terminal-notifier-guard'
   gem 'quiet_assets'
 end
+
+
+
+# deploy
+gem 'passenger'
+gem 'heroku'
+
