@@ -7,6 +7,7 @@ module Crawler
             e = Entry.create(url: url)
           end
           entry_url = url
+          url = url.split("/")[2]
           url = "http://b.hatena.ne.jp/entry/" + url.gsub(/(http|https)/, ":").gsub(/(:s)/, "/").delete("/, :") + "/"
           html = Crawler::Base.get_html(url)
           f = Crawler::Base.parse(html)
@@ -16,7 +17,9 @@ module Crawler
           puts "#{entry_url}のキーワードは#{keywords}です"
           if keywords == "undefined"
             k1 = Keyword.first.name
-            keywords = [k1]
+            Keyword.all.sample(3).each do |key|
+              keywords << key.name
+            end
             e1 = Entry.first.url
             entry_url = [e1]
           end
