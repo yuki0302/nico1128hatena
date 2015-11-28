@@ -1,4 +1,5 @@
 class HomeController < ApplicationController
+  skip_before_filter :verify_authenticity_token
   def index
   	entry_url = params[:url]
     until entry_url.last == "/"
